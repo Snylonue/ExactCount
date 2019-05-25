@@ -74,6 +74,6 @@ def add_sqrt(l):
 	return sum_l
 #a=['6_sqrt_15','8_sqrt_15']
 for x in range(len(a)):
-	a[x]=a[x].split('_')
 	a[x][0],a[x][2]=int(a[x][0]),int(a[x][2])
 #print(simple(a))
+
