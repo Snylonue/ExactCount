@@ -1,11 +1,14 @@
-import numpy
+from numpy import sqrt
+from functools import reduce
 def check_prime(num):
-	num=int(num)
-	if (num==1):
-		return False
-	if (num==2):
+	if (num==2 or num==3):
 		return True
-	max=int(numpy.sqrt(num))+1
+	if (num<=1 or num%2==0):
+		return False
+	if (num<9):
+		max=num+1
+	else:
+		max=int(sqrt(num))+1
 	for x in range(3,max,2):
 		if (num%x==0):
 			return False
@@ -19,61 +22,54 @@ def inpoint(l,num,va=2):
 			return False,0
 def prime_factor(num):
 	l=[num]
-	while (check_prime(l[-1])==False and l[-1]!=1):
+	while (not check_prime(l[-1]) and l[-1]!=1):
 		for x in range(2,l[-1]):
 			if (l[-1]%x==0):
 				l.append(x)
 				l[-1],l[-2]=int(l[-2]/l[-1]),l[-1]
 				break
 	return l
-def double(l):
-	for v,x in enumerate(l):
-		if (x[0]%2==0):
-			break
-		else:
-			l[v]-=1
-	return l
 def number(l):
-	s,p,sum_l=[],-1,0
-	for v,x in enumerate(l):
-		if (v<=p):
-			break
-		num_x,n=1,1
-		while (v+n<len(l) and l[v+n]==x):
-			p=v+n
-			num_x+=1
-			n+=1
-		s.append([num_x,x])
-	for x in s:
-		
-	s=list(filter(lambda x:x[0]!=0,map(double,s)))
-	for x in s:
-		sum_l+=x[0]/2*x[1]
-	return sum_l
+	s,sum_l=[[1,1]],0
+	for x in range(len(l)-2):
+		if (l[x]==l[x+1]):
+			include,point=inpoint(s,l[x],1)
+			if (include):
+				s[point][0]+=1
+			else:
+				s.append([2,l[x]])
+	if (len(s)==1):
+		return 1
+	else:	
+		s.pop(0)
+		for v,x in enumerate(s):
+			s[v][0]-=s[v][0]%2
+		for x in s:
+			sum_l+=x[0]/2*x[1]
+		return int(sum_l)
 def simple(l):
-	for x in l:
-		t=prime_factor(x[2])
-		if (len(t)==1):
-			break
-		else:
-			e=number(t)
-			x[0]*=e
-			x[2]/=e**2
+	for v,x in enumerate(l):
+		e=number(prime_factor(x[2]))
+		l[v][0]*=e
+		l[v][2]/=e**2
 	return l
 def add_sqrt(l):
-	sum_l=[]
+	s=[]
 	for v,x in enumerate(l):
 		if (v!=0):
 			include,point=inpoint(sum_l,x[2])	
 			if (include):
-				sum_l[point][0]+=x[0]
+				s[point][0]+=x[0]
 			else:
-				sum_l.append([x[0],x[1],x[2]])
+				s.append([x[0],x[1],x[2]])
 		else:
-			sum_l.append([x[0],x[1],x[2]])
-	return sum_l
-#a=['6_sqrt_15','8_sqrt_15']
+			s.append([x[0],x[1],x[2]])
+	return s
+'''
+a=['6_sqrt_20','8_sqrt_15']
 for x in range(len(a)):
+	a[x]=a[x].split('_')
 	a[x][0],a[x][2]=int(a[x][0]),int(a[x][2])
-#print(simple(a))
-
+'''
+#print(check_prime(5))
+#print(prime_factor(20))
