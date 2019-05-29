@@ -3,10 +3,10 @@ from functools import reduce
 def check_prime(num):
 	if (num==2 or num==3):
 		return True
-	if (num<=1 or num%2==0):
+	elif (num<=1 or num%2==0):
 		return False
-	if (num<9):
-		max=num+1
+	elif (num<9):
+		max=num//2
 	else:
 		max=int(sqrt(num))+1
 	for x in range(3,max,2):
