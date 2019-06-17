@@ -1,16 +1,36 @@
 from numpy import sqrt
 class tools(object):
-	def __init__(self,l):
-		self.list=l
+	def __init__(self,pro):
+		self.process=l
+	def quick_prime(self):
+		if (self.process<=1 or self.process%2==0 or self.process%3==0 or self.process%5==0 or self.process%7==0):
+			return False
+		elif ((self.process+1)%6!=0 and (self.process-1)%6!=0):
+			return False
+		elif (2**(self.process-1)%self.process!=1):
+			return False
+		else:
+			return True
 	def count(self):
 		s=1
-		l=self.list
+		l=self.process
 		for x in range(len(l)):
 			l[x][0]=int((l[x][0]-l[x][0]%2)/2)
 		print(l)
 		for x in l:
 			s=s*x[0]*x[1]
 		return s
+	def quick_prime(self):
+		if (quick_prime(self.process)):
+			return False
+		else:
+			max=int(sqrt(self.process))+1
+			if (x>self.process-2):
+				return True
+			for x in range(11,max,2):
+			if (x>self.process-2):
+				return True
+
 def isPrime(num):
 	if (num==2 or num==3 or num==5 or num==7):
 		return True
