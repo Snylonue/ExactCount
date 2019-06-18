@@ -32,7 +32,16 @@ class Number_tools(object):
 		l.insert(0,l[-1])
 		l.pop()
 		return l
-
+	def gcd(self,num1,num2):
+		result=0
+		if (num1>=num2):
+			m,n=num1,num2
+		else:
+			m,n=num2,num1
+		while (n!=0):
+			m,n=n,n%m
+			result=m
+		return result
 def count(d):
 	s=1
 	for x,v in d.items():
@@ -51,7 +60,7 @@ def number(l):
 				else:
 					s[l[x]]=2
 		return count(s)
-def simple(l):
+def simple_root(l):
 	tool=Number_tools()
 	for x,v in enumerate(l):
 		if (tool.isPrime(v[2])):
@@ -63,8 +72,10 @@ def simple(l):
 			s*=s
 			l[x][2]//=s
 	return l
+def simple_frac(l):
+	pass
 def add_sqrt(l):
-	l=simple(l)
+	l=simple_root(l)
 	s,s_l={},[]
 	for x in l:
 		if (x[2] in s):
@@ -79,11 +90,28 @@ def multiply_sqrt(l):
 	for x in l:
 		s0*=x[0]
 		s1*=x[2]
-	return simple([[s0,'sqrt',s1]])
-
+	return simple_root([[s0,'sqrt',s1]])
+def add_frac(l):
+	l=simple_frac(l)
+	s,s_l={},[]
+	for x in l:
+		if (x[2] in s):
+			s[x[2]]+=x[0]
+		else:
+			s[x[2]]=x[0]
+	for x,v in s.items():
+		s_l.append([v,'frac',x])
+	return s_l
 a=['6_sqrt_20','8_sqrt_80']
+def multiply_frac(l):
+	s0,s1=1,1
+	for x in l:
+		s0*=x[0]
+		s1*=x[2]
+	return simple([[s0,'frac',s1]])
 for x in range(len(a)):
 	a[x]=a[x].split('_')
 	a[x][0],a[x][2]=int(a[x][0]),int(a[x][2])
-print(add_sqrt(a))
+t=Number_tools()
+print(t.gcd(14,21))
 input()
