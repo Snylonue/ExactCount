@@ -67,10 +67,10 @@ def add_sqrt(l):
 	l=simple(l)
 	s,s_l={},[]
 	for x in l:
-			if (x[2] in s):
-				s[x[2]]+=x[0]
-			else:
-				s[x[2]]=x[0]
+		if (x[2] in s):
+			s[x[2]]+=x[0]
+		else:
+			s[x[2]]=x[0]
 	for x,v in s.items():
 		s_l.append([v,'sqrt',x])
 	return s_l
