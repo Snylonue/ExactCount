@@ -86,7 +86,4 @@ for x in range(len(a)):
 	a[x]=a[x].split('_')
 	a[x][0],a[x][2]=int(a[x][0]),int(a[x][2])
 print(add_sqrt(a))
-inn=input()
-#print(tool.isPrime(5))
-#print(tool.isPrime(7))
-#print(tool.factor(20))
+input()
