@@ -63,7 +63,7 @@ def simple(l):
 			s*=s
 			l[x][2]//=s
 	return l
-def add_sqrt(l):
+def add_root(l):
 	l=simple(l)
 	s,s_l={},[]
 	for x in l:
@@ -74,7 +74,7 @@ def add_sqrt(l):
 	for x,v in s.items():
 		s_l.append([v,'sqrt',x])
 	return s_l
-def multiply_sqrt(l):
+def multiply_root(l):
 	s0,s1=1,1
 	for x in l:
 		s0*=x[0]
@@ -85,7 +85,7 @@ a=['6_sqrt_20','8_sqrt_80']
 for x in range(len(a)):
 	a[x]=a[x].split('_')
 	a[x][0],a[x][2]=int(a[x][0]),int(a[x][2])
-print(add_sqrt(a))
+print(add_root(a))
 inn=input()
 #print(tool.isPrime(5))
 #print(tool.isPrime(7))
