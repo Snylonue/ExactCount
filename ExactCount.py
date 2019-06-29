@@ -89,7 +89,7 @@ def add_sqrt(l):
 	for x,v in s.items():
 		s_l.append([v,'sqrt',x])
 	return s_l
-def multiply_sqrt(l):
+def multiply_root(l):
 	s0,s1=1,1
 	for x in l:
 		s0*=x[0]
@@ -119,6 +119,7 @@ def devide_frac(l):
 		else:
 			v[0],v[2]=v[2],v[0]
 	return multiply_frac(l)
+
 
 
 '''
