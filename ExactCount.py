@@ -78,7 +78,7 @@ def simple_frac(l):
 		l[x][0]//=m
 		l[x][2]//=m
 	return l
-def add_sqrt(l):
+def add_sqrt(l):	
 	l=simple_root(l)
 	s,s_l={},[]
 	for x in l:
@@ -112,11 +112,19 @@ def multiply_frac(l):
 		s0*=x[0]
 		s1*=x[2]
 	return simple([[s0,'frac',s1]])
+def devide_frac(l):
+	for x,v in enumerate(l):
+		if (x==0):
+			continue
+		else:
+			v[0],v[2]=v[2],v[0]
+	return multiply_frac(l)
+
 
 '''
 a,b=['6_sqrt_20','8_sqrt_80'],['6_frac_20','8_frac_80']
-for x in range(len(a)):
-	b[x]=b[x].split('_')
+for x in range(len(a))
+:	b[x]=b[x].split('_')
 	b[x][0],b[x][2]=int(b[x][0]),int(b[x][2])
 #t=Number_tools()
 print(simple_frac(b))
