@@ -32,7 +32,15 @@ class Number_tools(object):
 		l.insert(0,l[-1])
 		l.pop()
 		return l
-
+	def gcd(self,num1,num2):
+		result=1
+		if (num1>=num2):
+			m,n=num1,num2
+		else:
+			m,n=num2,num1
+		while (n!=0):
+			m,n=n,m%n
+		return m
 def count(d):
 	s=1
 	for x,v in d.items():
@@ -51,7 +59,7 @@ def number(l):
 				else:
 					s[l[x]]=2
 		return count(s)
-def simple(l):
+def simple_root(l):
 	tool=Number_tools()
 	for x,v in enumerate(l):
 		if (tool.isPrime(v[2])):
@@ -63,8 +71,15 @@ def simple(l):
 			s*=s
 			l[x][2]//=s
 	return l
-def add_root(l):
-	l=simple(l)
+def simple_frac(l):
+	tool=Number_tools()
+	for x,v in enumerate(l):
+		m=tool.gcd(v[0],v[2])
+		l[x][0]//=m
+		l[x][2]//=m
+	return l
+def add_sqrt(l):	
+	l=simple_root(l)
 	s,s_l={},[]
 	for x in l:
 		if (x[2] in s):
@@ -79,14 +94,40 @@ def multiply_root(l):
 	for x in l:
 		s0*=x[0]
 		s1*=x[2]
-	return simple([[s0,'sqrt',s1]])
+	return simple_root([[s0,'sqrt',s1]])
+def add_frac(l):
+	l=simple_frac(l)
+	s,s_l={},[]
+	for x in l:
+		if (x[2] in s):
+			s[x[2]]+=x[0]
+		else:
+			s[x[2]]=x[0]
+	for x,v in s.items():
+		s_l.append([v,'frac',x])
+	return s_l
+def multiply_frac(l):
+	s0,s1=1,1
+	for x in l:
+		s0*=x[0]
+		s1*=x[2]
+	return simple([[s0,'frac',s1]])
+def devide_frac(l):
+	for x,v in enumerate(l):
+		if (x==0):
+			continue
+		else:
+			v[0],v[2]=v[2],v[0]
+	return multiply_frac(l)
 
-a=['6_sqrt_20','8_sqrt_80']
-for x in range(len(a)):
-	a[x]=a[x].split('_')
-	a[x][0],a[x][2]=int(a[x][0]),int(a[x][2])
-print(add_root(a))
-inn=input()
-#print(tool.isPrime(5))
-#print(tool.isPrime(7))
-#print(tool.factor(20))
+
+
+'''
+a,b=['6_sqrt_20','8_sqrt_80'],['6_frac_20','8_frac_80']
+for x in range(len(a))
+:	b[x]=b[x].split('_')
+	b[x][0],b[x][2]=int(b[x][0]),int(b[x][2])
+#t=Number_tools()
+print(simple_frac(b))
+input()
+'''
