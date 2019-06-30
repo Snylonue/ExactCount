@@ -41,6 +41,51 @@ class Number_tools(object):
 		while (n!=0):
 			m,n=n,m%n
 		return m
+class Frac_compute(object):
+	def add_frac(l):
+		l=simple_frac(self,l)
+		s,s_l={},[]
+		for x in l:
+			if (x[2] in s):
+				s[x[2]]+=x[0]
+			else:
+				s[x[2]]=x[0]
+		for x,v in s.items():
+			s_l.append([v,'frac',x])
+		return s_l
+	def multiply_frac(self,l):
+		s0,s1=1,1
+		for x in l:
+			s0*=x[0]
+			s1*=x[2]
+		return simple_frac([[s0,'frac',s1]])
+	def devide_frac(self,l):
+		for x,v in enumerate(l):
+			if (x==0):
+				continue
+			else:
+				v[0],v[2]=v[2],v[0]
+		return self.multiply_frac(l)
+class Root_compute(object):
+	def add_sqrt(self,l):	
+		l=simple_root(l)
+		s,s_l={},[]
+		for x in l:
+			if (x[2] in s):
+				s[x[2]]+=x[0]
+			else:
+				s[x[2]]=x[0]
+		for x,v in s.items():
+			s_l.append([v,'sqrt',x])
+		return s_l
+	def multiply_sqrt(self,l):
+		s0,s1=1,1
+		for x in l:
+			s0*=x[0]
+			s1*=x[2]
+		return simple_root([[s0,'sqrt',s1]])
+	def devide_root(self,l):
+		pass
 def count(d):
 	s=1
 	for x,v in d.items():
@@ -59,6 +104,16 @@ def number(l):
 				else:
 					s[l[x]]=2
 		return count(s)
+def normal(l):
+	# format:[[num0,'frac',num1],'root',num2]
+	for x in l:
+		if (isinstance(x[0],int) and isinstance(x[2],list)):
+			t1=x[2][2]
+			x[0],x[2]=[x[0],'frac',x[2][2]],x[2][0]*x[2][2]
+			x[0]=simple_frac(x[0])
+		elif (isinstance(x[0],list) and isinstance(x[2],list)):
+			x[0],x[2]=multiply_frac([x[0],[1,'frac',x[2][2]]]),x[2][0]*x[2][2]
+	return l
 def simple_root(l):
 	tool=Number_tools()
 	for x,v in enumerate(l):
@@ -78,54 +133,11 @@ def simple_frac(l):
 		l[x][0]//=m
 		l[x][2]//=m
 	return l
-def add_sqrt(l):	
-	l=simple_root(l)
-	s,s_l={},[]
-	for x in l:
-		if (x[2] in s):
-			s[x[2]]+=x[0]
-		else:
-			s[x[2]]=x[0]
-	for x,v in s.items():
-		s_l.append([v,'sqrt',x])
-	return s_l
-def multiply_root(l):
-	s0,s1=1,1
-	for x in l:
-		s0*=x[0]
-		s1*=x[2]
-	return simple_root([[s0,'sqrt',s1]])
-def add_frac(l):
-	l=simple_frac(l)
-	s,s_l={},[]
-	for x in l:
-		if (x[2] in s):
-			s[x[2]]+=x[0]
-		else:
-			s[x[2]]=x[0]
-	for x,v in s.items():
-		s_l.append([v,'frac',x])
-	return s_l
-def multiply_frac(l):
-	s0,s1=1,1
-	for x in l:
-		s0*=x[0]
-		s1*=x[2]
-	return simple([[s0,'frac',s1]])
-def devide_frac(l):
-	for x,v in enumerate(l):
-		if (x==0):
-			continue
-		else:
-			v[0],v[2]=v[2],v[0]
-	return multiply_frac(l)
-
-
 
 '''
 a,b=['6_sqrt_20','8_sqrt_80'],['6_frac_20','8_frac_80']
-for x in range(len(a))
-:	b[x]=b[x].split('_')
+for x in range(len(a)):	
+	b[x]=b[x].split('_')
 	b[x][0],b[x][2]=int(b[x][0]),int(b[x][2])
 #t=Number_tools()
 print(simple_frac(b))
