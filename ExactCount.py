@@ -111,7 +111,7 @@ def multiply_frac(l):
 	for x in l:
 		s0*=x[0]
 		s1*=x[2]
-	return simple([[s0,'frac',s1]])
+	return simple_frac([[s0,'frac',s1]])
 def devide_frac(l):
 	for x,v in enumerate(l):
 		if (x==0):
