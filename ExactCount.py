@@ -29,8 +29,10 @@ class Number_tools(object):
 					l.insert(0,x)
 					l[-1]//=x
 					break
+		'''
 		l.insert(0,l[-1])
 		l.pop()
+		'''
 		return l
 	def gcd(self,num1,num2):
 		result=1
@@ -89,8 +91,8 @@ class Root_compute(object):
 def count(d):
 	s=1
 	for x,v in d.items():
-		d[x]=(v-v%2)//2
-		s*=x*d[x]
+		v=(v-v%2)//2
+		s*=x**v
 	return s
 def number(l):
 	if (len(l)==1):
@@ -105,41 +107,36 @@ def number(l):
 					s[l[x]]=2
 		return count(s)
 def normal(l):
-	# format:[[num0,'frac',num1],'root',num2]
+	# format:[[[num0,'frac',num1],'root',num2],[num0,'frac',num1],'root',num2]]
+	tool=Frac_compute()
 	for x in l:
 		if (isinstance(x[0],int) and isinstance(x[2],list)):
 			t1=x[2][2]
 			x[0],x[2]=[x[0],'frac',x[2][2]],x[2][0]*x[2][2]
-			x[0]=simple_frac(x[0])
-		elif (isinstance(x[0],list) and isinstance(x[2],list)):
-			x[0],x[2]=multiply_frac([x[0],[1,'frac',x[2][2]]]),x[2][0]*x[2][2]
+			x[0]=simple_frac([x[0]])[0]
+		if (isinstance(x[0],list) and isinstance(x[2],list)):
+			x[0],x[2]=tool.multiply_frac([x[0],[1,'frac',x[2][2]]])[0],x[2][0]*x[2][2]
 	return l
 def simple_root(l):
-	tool=Number_tools()
+	tool,tool2=Number_tools(),Frac_compute()
 	for x,v in enumerate(l):
 		if (tool.isPrime(v[2])):
 			continue
 		else:
 			t=tool.factor(v[2])
 			s=number(t)
-			l[x][0]*=s
+			'''
+				v[0]*=s
+				s*=s
+			'''
+			v[0]=tool2.multiply_frac([v[0],[s,'frac',1]])
 			s*=s
-			l[x][2]//=s
+			v[2]//=s
 	return l
 def simple_frac(l):
 	tool=Number_tools()
 	for x,v in enumerate(l):
 		m=tool.gcd(v[0],v[2])
-		l[x][0]//=m
-		l[x][2]//=m
+		v[0]//=m
+		v[2]//=m
 	return l
-
-'''
-a,b=['6_sqrt_20','8_sqrt_80'],['6_frac_20','8_frac_80']
-for x in range(len(a)):	
-	b[x]=b[x].split('_')
-	b[x][0],b[x][2]=int(b[x][0]),int(b[x][2])
-#t=Number_tools()
-print(simple_frac(b))
-input()
-'''
