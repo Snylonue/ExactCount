@@ -5,7 +5,9 @@ from numpy import sqrt
 
 class Number_tools(object):
 	def notPrime(self,num):
-		if (num<=1 or num%2==0 or num%3==0 or num%5==0 or num%7==0):
+		if (type(num)!=int):
+			return True
+		elif (num<=1 or num%2==0 or num%3==0 or num%5==0 or num%7==0):
 			return True
 		elif ((num+1)%6!=0 and (num-1)%6!=0):
 			return True
@@ -76,23 +78,22 @@ class Frac_processing(Number_tools):
 			else:
 				v[0],v[2]=v[2],v[0]
 		return self.multiply_frac(l)
-class Root_processing(object):
+class Root_processing(Frac_processing):
 	def simple_root(self,l):
-		tool=Number_tools()
+		rc=type(v[2])
 		for x,v in enumerate(l):
-			if (type(v[2])==int):
-				if (tool.isPrime(v[2])):
+			if (rc==int):
+				if (self.isPrime(v[2])):
 					continue
-				else:
-					t=tool.factor(v[2])
-					s=number(t)
-					l[x][0]*=s
-					s*=s
-					l[x][2]//=s
+				n=number(self.factor(v[2]))
+				t=n**2
+				l[x][2]//=t
 			else:
-				pass
+				n=v[2][2]
+				v[2]=n*v[2][0]
+			if (type(v[0])==int):
 	def add_root(self,l):	
-		l=simple_root(l)
+		l=self.simple_root(l)
 		s,s_l={},[]
 		for x in l:
 			if (x[2] in s):
@@ -107,6 +108,25 @@ class Root_processing(object):
 		for x in l:
 			s0*=x[0]
 			s1*=x[2]
-		return simple_root([[s0,'sqrt',s1]])
+		return self.simple_root([[s0,'sqrt',s1]])
 	def devide_root(self,l):
 		pass
+
+def number(l):
+	if (len(l)==1):
+		return 1
+	else:
+		s={}	
+		for x in range(len(l)-1):
+			if (l[x]==l[x+1]):
+				if (l[x] in s):
+					s[l[x]]+=1
+				else:
+					s[l[x]]=2
+		return count(s)
+def count(d):
+	s=1
+	for x,v in d.items():
+		v=(v-v%2)//2
+		s*=x**v
+	return s
