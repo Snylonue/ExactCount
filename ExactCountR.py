@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+#format:[[1,2],3],[[2,1],5]
+
 from math import gcd
 from numpy import sqrt
 
@@ -43,57 +45,57 @@ class Number_tools(object):
 			l.pop(0)
 			l[0]=t
 		return l[0]
-class Frac_processing(Number_tools):
-	def simple_frac(self,l):
-		for x,v in enumerate(l):
-			m=gcd(v[0],v[2])
-			v[0]//=m
-			v[2]//=m
-		return l
+class Frac(Number_tools):
+	def __init__(self,mole,deno):
+		self.mole=mole
+		self.deno=deno
+	def simple_frac(self):
+		m=gcd(self.mole,self.deno)
+		self.mole//=m
+		self.deno//=m
+	def multiply_fracs(self,times):
+		self.mole*=m
+class Root(Number_tools):
+	def __init__(self,modu,base):
+		self.modu=modu
+		self.base=base
+	def simple_root(self):
+		if (self.isPrime(self.base)):
+			pass
+		else:
+			m=number(self.factor(self.modu))
+			self.modu.multiply_fracs(m)
+			self.modu.simple_frac()
+			self.base//=m**2
+class Frac_processing(Frac):
 	def add_frac(self,l):
-		l=self.simple_frac(l)
-		s,s_l,lcm_l={},[],[]
+		t,r=set([]),[0,0]
 		for x in l:
-			if (x[2] in s):
-				s[x[2]]+=x[0]
-			else:
-				s[x[2]]=x[0]
-		for x in s:
-			lcm_l.append(x)
-		t=self.lcm(lcm_l)
-		s_l.append([0,'frac',t])
-		for x,v in s.items():
-			s_l[0][0]+=v*(t//x)
-		return self.simple_frac(s_l)
+			t.add(x.deno)
+		m=self.lcm(list(t))
+		for x in l:
+			r[0]+=m//x.deno*x.mole
+			r[2]+=m
+		re=Frac(r[0],r[2])
+		re.simple_frac()
+		return re
 	def multiply_frac(self,l):
 		s0,s1=1,1
 		for x in l:
-			s0*=x[0]
-			s1*=x[2]
-		return self.simple_frac([[s0,'frac',s1]])
+			s0*=x.mole
+			s1*=x.deno
+		re=Frac(s0,s1)
+		re.simple_frac()
+		return re
 	def devide_frac(self,l):
 		for x,v in enumerate(l):
 			if (x==0):
 				continue
 			else:
-				v[0],v[2]=v[2],v[0]
-		return self.multiply_frac(l)
-class Root_processing(Frac_processing):
-	def simple_root(self,l):
-		rc=type(v[2])
-		for x,v in enumerate(l):
-			if (rc==int):
-				if (self.isPrime(v[2])):
-					continue
-				n=number(self.factor(v[2]))
-				t=n**2
-				l[x][2]//=t
-			else:
-				n=v[2][2]
-				v[2]=n*v[2][0]
-			if (type(v[0])==int):
+				v.mole,v.deno=v.deno,v.mole
+		return self.multiply_farc(l)
+class Root_processing(Root):
 	def add_root(self,l):	
-		l=self.simple_root(l)
 		s,s_l={},[]
 		for x in l:
 			if (x[2] in s):
@@ -130,3 +132,11 @@ def count(d):
 		v=(v-v%2)//2
 		s*=x**v
 	return s
+def input_format(l):
+	re=[]
+	for x in l:
+		if (True):
+			re.append(Root(Frac(x[0][0],x[0][1]),x[1]))
+		else:
+			pass
+	return re
