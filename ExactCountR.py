@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 #format:[[1,2],3],[[2,1],5]
-
 from math import gcd
 from numpy import sqrt
 
@@ -49,25 +48,25 @@ class Frac(Number_tools):
 	def __init__(self,mole,deno):
 		self.mole=mole
 		self.deno=deno
-	def simple_frac(self):
+	def simple(self):
 		m=gcd(self.mole,self.deno)
 		self.mole//=m
 		self.deno//=m
-	def multiply_fracs(self,times):
-		self.mole*=m
 class Root(Number_tools):
 	def __init__(self,modu,base):
 		self.modu=modu
 		self.base=base
-	def simple_root(self):
+	def simple(self):
 		if (self.isPrime(self.base)):
 			pass
 		else:
-			m=number(self.factor(self.modu))
-			self.modu.multiply_fracs(m)
-			self.modu.simple_frac()
+			m=number(self.factor(self.base))
+			t=Frac(m,1)
+			fp=Frac_processing()
+			self.modu=fp.multiply_frac([t,self.modu])
+			self.modu.simple()
 			self.base//=m**2
-class Frac_processing(Frac):
+class Frac_processing(Number_tools):
 	def add_frac(self,l):
 		t,r=set([]),[0,0]
 		for x in l:
@@ -77,7 +76,7 @@ class Frac_processing(Frac):
 			r[0]+=m//x.deno*x.mole
 			r[2]+=m
 		re=Frac(r[0],r[2])
-		re.simple_frac()
+		re.simple()
 		return re
 	def multiply_frac(self,l):
 		s0,s1=1,1
@@ -85,7 +84,7 @@ class Frac_processing(Frac):
 			s0*=x.mole
 			s1*=x.deno
 		re=Frac(s0,s1)
-		re.simple_frac()
+		re.simple()
 		return re
 	def devide_frac(self,l):
 		for x,v in enumerate(l):
@@ -93,26 +92,43 @@ class Frac_processing(Frac):
 				continue
 			else:
 				v.mole,v.deno=v.deno,v.mole
-		return self.multiply_farc(l)
-class Root_processing(Root):
-	def add_root(self,l):	
-		s,s_l={},[]
+		return self.multiply_frac(l)
+class Root_processing(Number_tools):
+	def add_root(self,l):
+		s,re={},[]
 		for x in l:
-			if (x[2] in s):
-				s[x[2]]+=x[0]
+			if (x.base in s):
+				s[x.base]+=x.modu
 			else:
-				s[x[2]]=x[0]
+				s[x.base]=x.modu
 		for x,v in s.items():
-			s_l.append([v,'sqrt',x])
-		return s_l
+			re.append(Frac(v,x))
+		return re
 	def multiply_root(self,l):
-		s0,s1=1,1
+		modus,bases=[],1
+		fp=Frac_processing()
 		for x in l:
-			s0*=x[0]
-			s1*=x[2]
-		return self.simple_root([[s0,'sqrt',s1]])
+			modus.append(x.modu)
+			bases*=x.base
+		res_modus=fp.devide_frac(modus)
+		res=Root(res_modus,bases)
+		res.simple()
+		return res
 	def devide_root(self,l):
-		pass
+		modus,s_temp=[],1
+		fp=Frac_processing()
+		for x in l:                #处理系数
+			modus.append(x.modu)
+		res_modus=fp.devide_frac(modus)
+		for x,v in enumerate(l):
+			if (x==0):
+				continue
+			else:
+				s_temp*=v.base
+		res=Root(Frac(1,s_temp),l[0].base*s_temp)
+		res.modu=fp.multiply_frac([res.modu,res_modus])
+		res.simple()
+		return res
 
 def number(l):
 	if (len(l)==1):
