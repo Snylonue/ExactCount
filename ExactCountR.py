@@ -74,8 +74,8 @@ class Frac_processing(Number_tools):
 		m=self.lcm(list(t))
 		for x in l:
 			r[0]+=m//x.deno*x.mole
-			r[2]+=m
-		re=Frac(r[0],r[2])
+			r[1]+=m
+		re=Frac(r[0],r[1])
 		re.simple()
 		return re
 	def multiply_frac(self,l):
@@ -93,40 +93,39 @@ class Frac_processing(Number_tools):
 			else:
 				v.mole,v.deno=v.deno,v.mole
 		return self.multiply_frac(l)
-class Root_processing(Number_tools):
+class Root_processing(Frac_processing):
 	def add_root(self,l):
 		s,re={},[]
 		for x in l:
+			x.simple()
 			if (x.base in s):
-				s[x.base]+=x.modu
+				s[x.base]=self.add_frac([s[x.base],x.modu])
 			else:
 				s[x.base]=x.modu
 		for x,v in s.items():
-			re.append(Frac(v,x))
+			re.append(Root(v,x))
 		return re
 	def multiply_root(self,l):
 		modus,bases=[],1
-		fp=Frac_processing()
 		for x in l:
 			modus.append(x.modu)
 			bases*=x.base
-		res_modus=fp.devide_frac(modus)
+		res_modus=self.devide_frac(modus)
 		res=Root(res_modus,bases)
 		res.simple()
 		return res
 	def devide_root(self,l):
 		modus,s_temp=[],1
-		fp=Frac_processing()
 		for x in l:                #处理系数
 			modus.append(x.modu)
-		res_modus=fp.devide_frac(modus)
+		res_modus=self.devide_frac(modus)
 		for x,v in enumerate(l):
 			if (x==0):
 				continue
 			else:
 				s_temp*=v.base
 		res=Root(Frac(1,s_temp),l[0].base*s_temp)
-		res.modu=fp.multiply_frac([res.modu,res_modus])
+		res.modu=self.multiply_frac([res.modu,res_modus])
 		res.simple()
 		return res
 
@@ -151,8 +150,11 @@ def count(d):
 def input_format(l):
 	re=[]
 	for x in l:
-		if (True):
-			re.append(Root(Frac(x[0][0],x[0][1]),x[1]))
-		else:
-			pass
+		if (type(x[1])==list):
+			t=gcd(x[1][0],x[1][1])
+			x[1][0]//=t
+			x[1][1]//=t
+			x[0][1]*=x[1][1]
+			x[1]=x[1][0]*x[1][1]
+		re.append(Root(Frac(x[0][0],x[0][1]),x[1]))
 	return re
