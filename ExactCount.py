@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-#format:[[1,2],3],[[2,1],5]
 from math import gcd
 from numpy import sqrt
 
