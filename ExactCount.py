@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 from math import gcd
 from numpy import sqrt
@@ -30,24 +31,35 @@ class Number_tools(object):
 					return True
 	def factor(self,num):
 		l=[num]
-		while (not self.isPrime(l[-1])):
+		while (not self.isPrime(l[-1]) and l[-1]!=1):
 			for x in range(2,l[-1]):
 				if (l[-1]%x==0):
-					l.insert(0,x)
+					l.insert(len(l)-1,x)
 					l[-1]//=x
 					break
 		return l
-	def lcm(self,l):	#can be deleted
-		slcm=lambda x,y:x//gcd(x,y)*y
-		while (len(l)>1):
-			t=(slcm(l[0],l[1]))
-			l.pop(0)
-			l[0]=t
-		return l[0]
 class Root(Number_tools):
 	def __init__(self,modu=Fraction(),base=1):
 		self.modu=modu
 		self.base=base
+		self.simple()
+	def __str__(self):
+		return 'Root(%s,%s)' % (self.modu,self.base)
+	def __add__(self,selves):
+		if (self.base==selves.base):
+			return Root(self.modu+selves.modu,self.base)
+	def __sub__(self,selves):
+		if (self.base==selves.base):
+			return Root(self.modu-selves.modu,self.base)
+	def __mul__(self,selves):
+		return Root(self.modu*selves.modu,self.base*selves.base)
+	def __truediv__(self,selves):
+		res_modu=self.modu/selves.modu/selves.base
+		res_base=self.base*selves.base
+		return Root(res_modu,res_base)
+	def __pow__(self,num):
+		pass
+		#return Root(self.modu**num,)
 	def simple(self):
 		if (self.isPrime(self.base)):
 			pass
@@ -55,40 +67,7 @@ class Root(Number_tools):
 			m=number(self.factor(self.base))
 			self.modu*=m
 			self.base//=m**2
-	def frac_to_int(self):
-		self.modu/=self.base.denominator
-		self.base=self.base.numerator*self.base.denominator
-class Root_processing(Number_tools):
-	def add(self,l):
-		s,re={},[]
-		for x in l:
-			x.simple()
-			if (x.base in s):
-				s[x.base]+=x.modu
-			else:
-				s[x.base]=x.modu
-		for x,v in s.items():
-			re.append(Root(v,x))
-		return re
-	def multiply(self,l):
-		res=Root(Fraction(1,1),1)
-		for x in l:
-			res.modu*=x.modu
-			res.base*=x.base
-		res.simple()
-		return res
-	def devide(self,l):
-		res=l[0]
-		for x,v in enumerate(l):
-			if (x==0):
-				continue
-			else:
-				res.modu/=v.modu
-				res.base/=v.base
-		if (type(res.base)==Fraction):
-			res.frac_to_int()
-		res.simple()
-		return res
+	__repr__=__str__
 
 def number(l):
 	if (len(l)==1):
