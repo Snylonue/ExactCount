@@ -44,7 +44,7 @@ class Root(Number_tools):
 		self.base=base
 		self.simple()
 	def __str__(self):
-		return 'Root(%s,%s)' % (self.modu,self.base)
+		return f'Root({self.modu},{self.base})'
 	def __add__(self,selves):
 		if (self.base==selves.base):
 			return Root(self.modu+selves.modu,self.base)
@@ -58,7 +58,12 @@ class Root(Number_tools):
 		res_base=self.base*selves.base
 		return Root(res_modu,res_base)
 	def __pow__(self,num):
-		pass
+		self.modu**=num
+		print(self.modu)
+		self.modu*=self.base**(num//2)
+		if (num%2==0):
+			self.base=1
+		return self
 		#return Root(self.modu**num,)
 	def simple(self):
 		if (self.isPrime(self.base)):
