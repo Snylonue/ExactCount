@@ -18,7 +18,7 @@ class Numtools(object):
 	def __notPrime(self,num):
 		if (type(num)!=int):
 			return True
-		elif (num<=1 or num%2==0 or num%3==0 or num%5==0 or num%7==0):
+		elif (num<=1 or num%2 is 0 or num%3 is 0 or num%5 is 0 or num%7 is 0):
 			return True
 		elif ((num+1)%6!=0 and (num-1)%6!=0):
 			return True
@@ -47,7 +47,7 @@ class Numtools(object):
 				return bool(cache)
 	def factor(self,num):
 		l=deque([num])
-		while (num!=1 and not self.isPrime(num)):
+		while not(num is 1 and self.isPrime(num)):
 			for x in range(2,num):
 				if (num%x==0):
 					t=l.pop()
@@ -64,10 +64,10 @@ class Root(Numtools):
 	def __str__(self):
 		return f'Root({self.modu},{self.base})'
 	def __add__(self,self2):
-		if (self.base==self2.base):
+		if (self.base is self2.base):
 			return Root(self.modu+self2.modu,self.base)
 	def __sub__(self,self2):
-		if (self.base==self2.base):
+		if (self.base is self2.base):
 			return Root(self.modu-self2.modu,self.base)
 	def __mul__(self,self2):
 		return Root(self.modu*self2.modu,self.base*self2.base)
@@ -79,12 +79,12 @@ class Root(Numtools):
 		self.modu**=num
 		print(self.modu)
 		self.modu*=self.base**(num//2)
-		if (num%2==0):
+		if (num%2 is 0):
 			self.base=1
 		return self
 		#return Root(self.modu**num,)
 	def __count(self,l):
-		if (len(l)==1):
+		if (len(l) is 1):
 			return 1
 		else:
 			s=defaultdict(lambda:1)
