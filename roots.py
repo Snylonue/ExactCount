@@ -16,18 +16,16 @@ class Numtools(object):
 		self.__max_cache=500000
 		self.__cache=defaultdict(lambda:2)
 	def __notPrime(self,num):
-		if (type(num)!=int):
+		if num<=1 or num%2 is 0 or num%3 is 0 or num%5 is 0 or num%7 is 0:
 			return True
-		elif (num<=1 or num%2 is 0 or num%3 is 0 or num%5 is 0 or num%7 is 0):
-			return True
-		elif ((num+1)%6!=0 and (num-1)%6!=0):
+		elif (num+1)%6!=0 and (num-1)%6!=0:
 			return True
 		else:
 			return False
 	def isPrime(self,num):
-		if (num in [2,3,5,7,11,13,17,19]):
+		if num in (2,3,5,7,11,13,17,19):
 			return True
-		elif (self.__notPrime(num)):
+		elif self.__notPrime(num):
 			return False
 		else: 
 			cache=self.__cache[num]
@@ -77,12 +75,10 @@ class Root(Numtools):
 		return self
 	def __pow__(self,num):
 		self.modu**=num
-		print(self.modu)
 		self.modu*=self.base**(num//2)
-		if (num%2 is 0):
+		if num%2 is 0:
 			self.base=1
 		return self
-		#return Root(self.modu**num,)
 	def __count(self,l):
 		if (len(l) is 1):
 			return 1
@@ -102,17 +98,3 @@ class Root(Numtools):
 			self.modu*=m
 			self.base//=m**2
 	__repr__=__str__
-
-
-'''
-here's old code
-def input_format(l): 
-	res=[]
-	for x in l:
-		x=Root(Fraction(x[0][0],x[0][1]),x[1])
-		if (type(x.base)==list):
-			x.base=Fraction(x.base[0],x.base[1])
-			x.frac_to_int()
-		res.append(x)
-	return res
-'''
