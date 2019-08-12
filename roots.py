@@ -19,10 +19,8 @@ class Numtools(object):
 	def __notPrime(self,num):
 		if num<=1 or num%2 is 0 or num%3 is 0 or num%5 is 0 or num%7 is 0:
 			return True
-		elif (num+1)%6!=0 and (num-1)%6!=0:
-			return True
 		else:
-			return False
+			return (num+1)%6!=0 and (num-1)%6!=0
 	def isPrime(self,num):
 		if num in (2,3,5,7,11,13,17,19):
 			return True
@@ -49,7 +47,6 @@ class Numtools(object):
 			return self.__factor_cache[num]
 		l=deque([num])
 		while num is not 1 and not self.isPrime(num):
-			print(l)
 			for x in range(2,num):
 				if (num%x==0):
 					t=l.pop()
