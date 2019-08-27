@@ -17,7 +17,7 @@ class Numtools(object):
 		self.__prime_cache=defaultdict(lambda:2)
 		self.__factor_cache=defaultdict(lambda:deque([]))
 	def __notPrime(self,num):
-		if num<=1 or num%2 is 0 or num%3 is 0 or num%5 is 0 or num%7 is 0:
+		if any((num<=1,num%2 is 0,num%3 is 0,num%5 is 0,num%7 is 0))
 			return True
 		else:
 			return (num+1)%6!=0 and (num-1)%6!=0
@@ -32,11 +32,11 @@ class Numtools(object):
 				end=sqrt(num)
 				not_cache_full=len(self.__cache)<self.__max_cache
 				for x in range(11,num,7):
-					if (num%x is 0):
+					if num%x is 0:
 						if not_cache_full:
 							self.__cache[num]=0
 						return False
-					elif (x>=end):
+					elif x>=end:
 						if not_cache_full:
 							self.__cache[num]=1
 						return True
@@ -48,7 +48,7 @@ class Numtools(object):
 		l=deque([num])
 		while num is not 1 and not self.isPrime(num):
 			for x in range(2,num):
-				if (num%x==0):
+				if num%x==0:
 					t=l.pop()
 					l.append(x)
 					l.append(t//x)
@@ -91,7 +91,7 @@ class Root(Numtools):
 				res*=x**(v//2)			
 			return res
 	def simple(self):
-		if (self.isPrime(self.base)):
+		if self.isPrime(self.base):
 			pass
 		else:
 			m=self.__count(self.factor(self.base))
