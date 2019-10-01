@@ -7,54 +7,52 @@ from fractions import Fraction
 from collections import defaultdict,deque
 
 class Numtools(object):
-	__instance=None
-	def __new__(cls,*args,**kwargs):
-		if cls.__instance is None:
-			cls.__instance=object.__new__(cls)
-		return cls.__instance
-	def __init__(self):
-		self.__max_cache=500000
-		self.__prime_cache=defaultdict(lambda:2)
-		self.__factor_cache=defaultdict(lambda:deque([]))
-	def __notPrime(self,num):
-		if any((num<=1,num%2 is 0,num%3 is 0,num%5 is 0,num%7 is 0))
+	__max_cache=1000
+	__prime_cache=defaultdict(lambda:2)
+	__factor_cache=defaultdict(lambda:deque([]))
+	__primes={2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103}
+	@staticmethod
+	def __notPrime(num):
+		if any((num<=1,num%2 is 0,num%3 is 0,num%5 is 0,num%7 is 0)):
 			return True
 		else:
 			return (num+1)%6!=0 and (num-1)%6!=0
-	def isPrime(self,num):
-		if num in (2,3,5,7,11,13,17,19):
+	@classmethod
+	def isPrime(cls,num):
+		if num in cls.__primes:
 			return True
-		elif self.__notPrime(num):
+		elif cls.__notPrime(num):
 			return False
-		else: 
-			cache=self.__cache[num]
+		else:
+			cache=cls.__prime_cache[num]
 			if cache is 2:
-				end=sqrt(num)
-				not_cache_full=len(self.__cache)<self.__max_cache
-				for x in range(11,num,7):
+				end=int(sqrt(num))
+				not_cache_full=len(cls.__prime_cache)<cls.__max_cache
+				for x in range(11,end,7):
 					if num%x is 0:
 						if not_cache_full:
-							self.__cache[num]=0
+							cls.__prime_cache[num]=0
 						return False
-					elif x>=end:
+					elif x>=end-7:
 						if not_cache_full:
-							self.__cache[num]=1
+							cls.__prime_cache[num]=1
 						return True
 			else:
 				return bool(cache)
-	def factor(self,num):
-		if len(self.__factor_cache[num]) is not 0:
-			return self.__factor_cache[num]
-		l=deque([num])
-		while num is not 1 and not self.isPrime(num):
-			for x in range(2,num):
-				if num%x==0:
+	@classmethod
+	def factor(cls,num):
+		if cls.__factor_cache[num]:
+			return cls.__factor_cache[num]
+		l,last=deque([num]),num
+		while last is not 1 and not cls.isPrime(last):	
+			for x in range(2,last):
+				if last%x==0:
 					t=l.pop()
 					l.append(x)
 					l.append(t//x)
 					break
-			num=l[-1]
-		self.__factor_cache[num]=l
+			last=l[-1]
+		cls.__factor_cache[num]=l
 		return l
 class Root(Numtools):
 	def __init__(self,modu=Fraction(),base=1):
