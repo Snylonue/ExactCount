@@ -9,10 +9,10 @@ class Numtools(object):
 	__max_cache=1000
 	__prime_cache={}
 	__factor_cache={}
-	__primes={2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103}
+	__primes={2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139}
 	@staticmethod
 	def __notPrime(num):
-		if any((num<=1,num%2 is 0,num%3 is 0,num%5 is 0,num%7 is 0,num%11 is 0,num%13 is 0)):
+		if any((num<=1,num%2 is 0,num%3 is 0,num%5 is 0,num%7 is 0,num%11 is 0,num%13 is 0,num%17 is 0,num%19 is 0)):
 			return True
 		else:
 			return (num+1)%6!=0 and (num-1)%6!=0
